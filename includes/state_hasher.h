@@ -1,0 +1,4 @@
+class StateHasher {
+public:
+private:
+};
