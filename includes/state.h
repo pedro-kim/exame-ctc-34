@@ -1,3 +1,6 @@
+#ifndef STATE_H
+#define STATE_H
+
 #include <memory>
 #include <unordered_map>
 #include <string>
@@ -19,11 +22,14 @@ public:
     bool getIsFinal(); // Returns if this is final
     void setIsFinal(bool); // Sets if this is final
 
+    unsigned int getId();
+
     StatePtr copyOfState(); // Returns a copy of this
     
     StatePtr& transition(char); // Returns the pointer to the state which results from the transition by char
     void setTransition(char, std::pair<std::string, StatePtr&>); // Sets a specific transition by a char to a state pointer
     void cleanTransition(); // Cleans all transitions of this
+    std::unordered_map<char, std::pair<std::string, StatePtr>> getTransitions();
 
     std::string getStateOutput();
     void setStateOutput(std::string);
@@ -38,3 +44,5 @@ private:
 
     std::unordered_map<char, std::pair<std::string, StatePtr>> transitions_;
 };
+
+#endif

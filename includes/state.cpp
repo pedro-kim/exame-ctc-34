@@ -10,8 +10,8 @@ bool State::getIsFinal() {
     return this->isFinal_;
 }
 
-void State::setIsFinal(bool exp) {
-    this->isFinal_ = exp;
+void State::setIsFinal(bool b) {
+    this->isFinal_ = b;
 }
 
 StatePtr State::copyOfState() {
@@ -21,4 +21,24 @@ StatePtr State::copyOfState() {
 StatePtr& State::transition(char c) {
     if(this->transitions_.find(c) == this->transitions_.end())
         return;
+}
+
+void State::setTransition(char c, std::pair<std::string, StatePtr&> pair) {
+
+}
+
+void State::cleanTransition() {
+
+}
+
+std::unordered_map<char, std::pair<std::string, StatePtr>> State::getTransitions() {
+
+}
+
+std::string State::getStateOutput() {
+    return this->output_;
+}
+
+void State::setStateOutput(std::string s) {
+    this->output_ = s;
 }
