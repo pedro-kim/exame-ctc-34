@@ -1,13 +1,16 @@
 #include "state.h"
+#include "state_hasher.h"
+#include "auxiliar.h"
+
 #include <vector>
 
 class Transducer {
 public:
-    Transducer();
+    Transducer() = default;
     ~Transducer();
 
     void printTransducer(const std::string& printerFolder);
-    
+    void generate(const std::string& filePath);
 
     StatePtr initialState;
 
@@ -16,6 +19,11 @@ public:
     unsigned int numberOfWords = 0;
 
     std::vector<std::string> words;
+
 private:
+    StatePtr findMinimized(StatePtr);
+
+    std::unordered_map<std::string, StatePtr, StateHasher> states_;
+    StatePtr tempStates[MAX_WORD_SIZE];
 
 };

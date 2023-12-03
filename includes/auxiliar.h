@@ -1,2 +1,1 @@
-#define MAX_WORD_SIZE = 30;
-
+#define MAX_WORD_SIZE 30
