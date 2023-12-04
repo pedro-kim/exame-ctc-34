@@ -34,12 +34,12 @@ public:
   std::string getOutput(char);       // Returns string from transition by char
   void setOutput(char, std::string); // Sets the string output from transition by char
 
+  std::map<char, std::pair<std::string, std::shared_ptr<State>>> transitions_;
 private:
   bool isFinal_;
   std::string output_;
   const unsigned int id_;
 
-  std::map<char, std::pair<std::string, std::shared_ptr<State>>> transitions_;
 };
 
 #endif

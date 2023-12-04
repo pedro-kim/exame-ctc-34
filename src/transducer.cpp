@@ -42,11 +42,19 @@ void Transducer::make(const std::string& filePath, Transducer& t)
     for (int i = previousWord.size(); i > prefixLengthPlus1; i--)
       t.tempStates_[i - 1]->setTransition(previousWord[i - 1], t.findMinimized(t.tempStates_[i]));
 
+    // std::cout << "ENTRE" << std::endl;
+    // for (auto s : t.tempStates_[0]->getTransitions())
+    //   std::cout << s.first << " " << s.second.first << " " << s.second.second->getIsFinal() << std::endl;
+
     for (int i = prefixLengthPlus1; i < currentWord.size(); i++)
     {
       t.tempStates_[i + 1]->cleanTransitions();
       t.tempStates_[i]->setTransition(currentWord[i], t.tempStates_[i + 1]);
     }
+
+    // std::cout << "END" << std::endl;
+    // for (auto s : t.tempStates_[0]->getTransitions())
+    //   std::cout << s.first << " " << s.second.first << " " << s.second.second->getIsFinal() << std::endl;
 
     t.tempStates_[currentWord.size()]->setIsFinal(true);
 
@@ -140,11 +148,14 @@ StatePtr Transducer::findMinimized(StatePtr s)
 
     for (auto& pair : s->getTransitions())
     {
-      r->setTransition(pair.first, pair.second.second);
+      r->transitions_[pair.first] = pair.second;
+      // r->setTransition(pair.first, pair.second.second);
       // r->getTransitions()[pair.first] = pair.second;
     }
 
     states_[r] = numberOfStates_++;
+    std::cout << "Number of states: " << numberOfStates_ << std::endl;
+    std::cout << "id: " << r->getId() << std::endl;
     numberOfEdges_ += r->getTransitions().size();
   }
 

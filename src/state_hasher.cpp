@@ -6,7 +6,6 @@ std::size_t StateHasher::operator()(const StatePtr s) const
 
   hash_combine(hashValue, s->getIsFinal());
   hash_combine(hashValue, s->getStateOutput());
-  // hash_combine(hashValue, s->getId());
 
   for (const auto &pair : s->getTransitions())
   {
