@@ -47,13 +47,13 @@ StatePtr State::copyOfState()
   return std::make_shared<State>(*this);
 }
 
-StatePtr &State::transition(char c)
-{
-  if (this->transitions_.find(c) == this->transitions_.end())
-    return;
-}
+// StatePtr &State::transition(char c)
+// {
+//   if (this->transitions_.find(c) == this->transitions_.end())
+//     return;
+// }
 
-void State::setTransition(char c, StatePtr &toState)
+void State::setTransition(char c, StatePtr toState)
 {
   if (transitions_.find(c) == transitions_.end())
     transitions_[c] = std::make_pair("", toState);

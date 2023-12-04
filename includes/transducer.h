@@ -30,7 +30,7 @@ public:
 private:
   StatePtr findMinimized(StatePtr);
 
-  std::unordered_map<std::string, StatePtr, StateHasher, StateEqual> states_;
+  std::unordered_map<StatePtr, std::size_t, StateHasher, StateEqual> states_;
   StatePtr tempStates_[MAX_WORD_SIZE];
   StatePtr initialState_;
 
