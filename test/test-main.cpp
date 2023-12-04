@@ -15,8 +15,6 @@ int trie_test() {
   return  0;
 }
 
-#include <iostream>
-
 int levenshtein_test() {
   std::cout << "Hello World! Levenshtein" << std::endl;
   return 0;
