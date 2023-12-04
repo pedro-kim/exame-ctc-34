@@ -1,6 +1,6 @@
 #include <iostream>
-#include "trie.h"
-#include "state.h"
+#include "../includes/trie.h"
+#include "../includes/state.h"
 
 Trie::Trie()
 {

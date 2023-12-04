@@ -29,12 +29,12 @@ bool operator==(const State &left, const State &right)
 
 bool State::getIsFinal()
 {
-  return this->isFinal_;
+  return isFinal_;
 }
 
 void State::setIsFinal(bool b)
 {
-  this->isFinal_ = b;
+  isFinal_ = b;
 }
 
 unsigned int State::getId()

@@ -1,15 +1,15 @@
-#include "transducer.h"
-
+#include "../includes/transducer.h"
+#include <fstream>
 #include <iostream>
 #include <fstream>
 
 Transducer::Transducer() : numberOfEdges_(0), numberOfStates_(0), numberOfWords_(0)
 {
-  for (auto &s : tempStates_)
+  for (auto& s : tempStates_)
     s = std::make_shared<State>();
 }
 
-void Transducer::make(const std::string &filePath, Transducer &t)
+void Transducer::make(const std::string& filePath, Transducer& t)
 {
   std::ifstream inputFile(filePath);
 
@@ -28,13 +28,13 @@ void Transducer::make(const std::string &filePath, Transducer &t)
 
   while (std::getline(inputFile, currentWord))
   {
-    t.increaseNumberOfWords();
     currentOutput = std::to_string(t.getNumberOfWords());
+    t.increaseNumberOfWords(); // TODO: switch number of words
     prefixLengthPlus1 = 0;
 
     while ((prefixLengthPlus1 < currentWord.size()) &&
-           (prefixLengthPlus1 < previousWord.size()) &&
-           (previousWord[prefixLengthPlus1] == currentWord[prefixLengthPlus1]))
+      (prefixLengthPlus1 < previousWord.size()) &&
+      (previousWord[prefixLengthPlus1] == currentWord[prefixLengthPlus1]))
       prefixLengthPlus1++;
 
     // int prefixLengthPlus1 = i;
@@ -64,7 +64,7 @@ void Transducer::make(const std::string &filePath, Transducer &t)
 
       t.tempStates_[j]->setOutput(currentWord[j], commonPrefix);
 
-      for (auto &pair : t.tempStates_[j + 1]->getTransitions())
+      for (auto& pair : t.tempStates_[j + 1]->getTransitions())
         t.tempStates_[j + 1]->setOutput(pair.first, (wordSuffix + t.tempStates_[j + 1]->getOutput(pair.first)));
 
       if (t.tempStates_[j + 1]->getIsFinal())
@@ -123,6 +123,7 @@ void Transducer::increaseNumberOfWords()
 
 StatePtr Transducer::findMinimized(StatePtr s)
 {
+  // TODO: Verify findMinimized
   StatePtr r = nullptr;
 
   if (states_.find(s) != states_.end())
@@ -133,12 +134,14 @@ StatePtr Transducer::findMinimized(StatePtr s)
 
   else
   {
+    r = std::make_shared<State>();
     r->setIsFinal(s->getIsFinal());
     r->setStateOutput(s->getStateOutput());
 
-    for (auto &pair : s->getTransitions())
+    for (auto& pair : s->getTransitions())
     {
-      r->getTransitions()[pair.first] = pair.second;
+      r->setTransition(pair.first, pair.second.second);
+      // r->getTransitions()[pair.first] = pair.second;
     }
 
     states_[r] = numberOfStates_++;
@@ -147,3 +150,46 @@ StatePtr Transducer::findMinimized(StatePtr s)
 
   return r;
 }
+
+void Transducer::printTransducer(const std::string& printerFolder)
+{
+  // TODO: Verify printer
+  std::ofstream graphFile(printerFolder);
+
+  graphFile << "digraph G {\n";
+  graphFile << "rankdir=LR;\n";
+  graphFile << "charset=\"utf8\";\n";
+  graphFile << "node [shape=circle];\n";
+  graphFile << "ini [shape=point];\n";
+  graphFile << "ini -> q" << states_[initialState_] << ";\n";
+
+  for (auto& state : states_) {
+    if (state.first->getStateOutput() != "") {
+      graphFile << "\tq" << state.second << " [label=\"q" << state.second << " / " << state.first->getStateOutput() << "\"];\n";
+    }
+
+    else {
+      graphFile << "\tq" << state.second << " [label=\"q" << state.second << "\"];\n";
+    }
+    if (state.first->getIsFinal()) {
+      graphFile << "\tq" << state.second << " [shape=doublecircle];\n";
+      graphFile << "\tq" << state.second << " [style=filled fillcolor=gray];\n";
+    }
+  }
+
+  for (auto& state : states_) {
+    for (auto& transition : state.first->getTransitions()) {
+
+      if (transition.second.first != "") {
+        graphFile << "\tq" << state.second << " -> q" << states_[transition.second.second] << " [label=\"" << transition.first << " / " << transition.second.first << "\"];\n";
+      }
+
+      else {
+        graphFile << "\tq" << state.second << " -> q" << states_[transition.second.second] << " [label=\"" << transition.first << "\"];\n";
+      }
+    }
+  }
+
+  graphFile << "}\n";
+}
+
