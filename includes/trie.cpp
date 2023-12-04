@@ -2,18 +2,17 @@
 #include "trie.h"
 #include "state.h"
 
-Trie::Trie() {
+Trie::Trie()
+{
   std::cout << "Trie" << std::endl;
 }
 
-Trie::~Trie() {
+Trie::~Trie()
+{
   std::cout << "~Trie" << std::endl;
 }
 
-void Trie::make(const std::string& filePath, Trie& T) {
-  std::cout << filePath << std::endl;
-}
-
-void Trie::printTrie() {
+void Trie::printTrie()
+{
   std::cout << "Trie" << std::endl;
 }

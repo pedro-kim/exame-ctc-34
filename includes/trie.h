@@ -1,20 +1,21 @@
 #include <unordered_map>
 #include <string>
 #include <vector>
-#include "auxiliar.h"
 #include "state.h"
 #include "state_hasher.h"
 #include "state_equal.h"
 
-using StatePtr = std::shared_ptr<State>;
-class Trie {
-public:
+#define MAX_WORD_SIZE 30
 
+using StatePtr = std::shared_ptr<State>;
+class Trie
+{
+public:
   Trie();
 
   ~Trie();
 
-  static void make(const std::string& filePath, Trie& T);
+  static void make(const std::string &filePath, Trie &T);
 
   void printTrie();
 
@@ -32,7 +33,6 @@ public:
   std::vector<std::string> words;
 
 private:
-
   StatePtr findMinimized(StatePtr);
 
   std::unordered_map<std::string, StatePtr, StateHasher, StateEqual> states_;
@@ -42,5 +42,4 @@ private:
   unsigned int numberOfStates = 0;
   unsigned int numberOfEdges = 0;
   unsigned int numberOfWords = 0;
-
 };

@@ -1,39 +1,42 @@
 #include "state.h"
 #include "state_hasher.h"
 #include "state_equal.h"
-#include "auxiliar.h"
 
 #include <vector>
 
-class Transducer {
+#define MAX_WORD_SIZE 30
+
+class Transducer
+{
 public:
-    Transducer() = default;
-    ~Transducer() = default;
+  Transducer();
 
-    void printTransducer(const std::string& printerFolder);
-    void generate(const std::string& filePath);
+  static void make(const std::string &, Transducer &);
 
-    StatePtr getInitialState();
+  void printTransducer(const std::string &printerFolder);
 
-    unsigned int getNumberOfStates();
-    void setNumberOfStates(unsigned int);
+  StatePtr getInitialState();
+  void setInitialState(StatePtr);
 
-    unsigned int getNumberOfEdges();
-    void setNumberOfEdges(unsigned int);
+  unsigned int getNumberOfStates();
+  void increaseNumberOfStates();
 
-    unsigned int getNumberOfWords();
-    void setNumberOfWords(unsigned int);
+  unsigned int getNumberOfEdges();
+  void increaseNumberOfEdges();
 
-    std::vector<std::string> words;
+  unsigned int getNumberOfWords();
+  void increaseNumberOfWords();
 
 private:
-    StatePtr findMinimized(StatePtr);
+  StatePtr findMinimized(StatePtr);
 
-    std::unordered_map<std::string, StatePtr, StateHasher, StateEqual> states_;
-    StatePtr tempStates[MAX_WORD_SIZE];
-    StatePtr initialState;
+  std::unordered_map<std::string, StatePtr, StateHasher, StateEqual> states_;
+  StatePtr tempStates_[MAX_WORD_SIZE];
+  StatePtr initialState_;
 
-    unsigned int numberOfStates = 0;
-    unsigned int numberOfEdges = 0;
-    unsigned int numberOfWords = 0;
+  std::vector<std::string> words_;
+
+  unsigned int numberOfStates_;
+  unsigned int numberOfEdges_;
+  unsigned int numberOfWords_;
 };
