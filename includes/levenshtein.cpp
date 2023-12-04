@@ -1,12 +1,12 @@
 #include <levenshtein.h>
 
-// Construtor
-lev_state LevenshteinDFA::start() {
+// inicializa o primeiro estado de Levenshtein
+lev_state LevenshteinDFA::start(void) {
 
     lev_state v(input.size() + 1);
 
     for (size_t i = 0; i <= input.size(); ++i) v[i] = i;
-     
+    
     return v;
 }
 
@@ -49,12 +49,13 @@ std::unordered_set<char> LevenshteinDFA::transitions(const lev_state cur_state) 
 }
 
 // Função recursiva que explora o DFA em um DFS e retorna a numeração dos estados a partir da ordem de visita
-// 
+// states_map deve ser inicializado com todos os estados possíveis
+// transitions_vector armazena todas as transilçoes (estado incial, estado final, caracter lido)
 int LevenshteinDFA::explore(lev_state& cur_state,
                             std::map<lev_state, int>& states_map,
                             unsigned int& counter,
                             std::vector<int>& matching,
-                            std::vector<std::tuple<int, int, char>>& transitionsStates) {
+                            std::vector<std::tuple<int, int, char>>& transitions_vector) {
 
     if (states_map.find(cur_state) != states_map.end()) {
         return states_map[cur_state];
@@ -71,11 +72,55 @@ int LevenshteinDFA::explore(lev_state& cur_state,
 
     for (char c : transitions_set) {
         lev_state next_state(step(cur_state, c));
-        int exp = explore(next_state, states_map, counter, matching, transitionsStates);
-        transitionsStates.push_back(std::make_tuple(states_map[cur_state], exp, c));
+        int exp = explore(next_state, states_map, counter, matching, transitions_vector);
+        transitions_vector.push_back(std::make_tuple(states_map[cur_state], exp, c));
     }
 
     return states_map[cur_state];
 }
 
 // Gera o DFA de Levenshtein
+void LevenshteinDFA::generateDFA() {
+
+    std::map<lev_state, int> states_map;
+    unsigned int counter = 0;
+    std::vector<int> matching;
+
+    lev_state initial_state(start());
+    explore(initial_state, states_map, counter, matching, transitions_vector);
+
+    dfa_vector.resize(counter);
+
+    // cuidado com o id counter
+    for (int i = 0; i < counter; ++i) {
+        dfa_vector[i] = std::make_shared<State>();
+        dfa_vector[i]->cleanTransition();
+    }
+
+    for (auto &trans : transitions_vector) {
+        int start, end;
+        char label;
+
+        start = std::get<0>(trans);
+        end = std::get<1>(trans);
+        label = std::get<2>(trans);
+        dfa_vector[start]->transitions[label] = dfa_vector[end];
+    }
+
+    std::cout << "digraph G {\n";
+    std::cout << "    rankdir=LR;\n";
+    std::cout << "    size=\"8,5\"\n";
+    std::cout << "    node [shape = doublecircle];\n";
+
+    for (auto &x : matching) {
+        std::cout << "    " << x << ";\n";
+    }
+
+    std::cout << "    node [shape = circle];\n";
+
+    for (auto &x : transitions_vector) {
+        std::cout << "    " << std::get<0>(x) << " -> " << std::get<1>(x) << " [ label = \"" << std::get<2>(x) << "\" ];\n";
+    }
+
+    std::cout << "}\n";
+}

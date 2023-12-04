@@ -1,6 +1,7 @@
 #ifndef LEVENSHTEIN
 #define LEVENSHTEIN
 
+#include "state.h"
 #include <vector>
 #include <string>
 #include <algorithm>
@@ -9,6 +10,7 @@
 #include <map>
 
 using lev_state = std::vector<int>;
+using StatePtr = std::shared_ptr<State>;
 
 class LevenshteinDFA {
 
@@ -22,6 +24,8 @@ class LevenshteinDFA {
 
         std::string input;
         int distance;
+        std::vector<std::tuple<int, int, char>> transitions_vector;
+        std::vector<StatePtr> dfa_vector;
 
         lev_state start(void);
         lev_state step(const lev_state& cur_state, char c);
@@ -32,7 +36,7 @@ class LevenshteinDFA {
                     std::map<lev_state, int>& states_map,
                     unsigned int& counter,
                     std::vector<int>& matching,
-                    std::vector<std::tuple<int, int, char>>& transitionsStates);
+                    std::vector<std::tuple<int, int, char>>& transitions_vector);
         
 
 };
