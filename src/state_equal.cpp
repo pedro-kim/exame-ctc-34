@@ -15,7 +15,7 @@ bool StateEqual::operator()(const StatePtr left, const StatePtr right) const
   {
     auto left_it = left->getTransitions().find(pair.first);
 
-    if (left_it == left->getTransitions().end())
+    if (left_it == left->transitions_.end())
       return false;
     if (pair.second.first != left_it->second.first)
       return false;

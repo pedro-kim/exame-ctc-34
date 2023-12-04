@@ -7,6 +7,7 @@ BUILD_DIR = build
 EXECUTABLE = main
 TEST_EXECUTABLE = test-main
 GRAPH_DIR = assets/graphs
+IMAGES_DIR = assets/images
 
 # Lista de arquivos fonte em src
 SRCS = $(wildcard $(SRC_DIR)/*.cpp)
@@ -41,7 +42,7 @@ $(BUILD_DIR)/%.o: $(TEST_DIR)/%.cpp $(INCLUDES)
 
 # Limpar arquivos intermediários e executável
 clean:
-	rm -rf $(BUILD_DIR)/*.o $(EXECUTABLE) $(TEST_EXECUTABLE) $(GRAPH_DIR)/*.png $(GRAPH_DIR)/*.dot
+	rm -rf $(BUILD_DIR)/*.o $(EXECUTABLE) $(TEST_EXECUTABLE) $(IMAGES_DIR)/*.png $(GRAPH_DIR)/*.dot
 
 # Rodar os testes
 test: $(TEST_EXECUTABLE)
