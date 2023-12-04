@@ -10,10 +10,10 @@ Trie::~Trie() {
   std::cout << "~Trie" << std::endl;
 }
 
-void Trie::printTrie() {
-    std::cout << "Trie" << std::endl;
+void Trie::make(const std::string& filePath, Trie& T) {
+  std::cout << filePath << std::endl;
 }
 
-void Trie::readFromFile(const std::string& filePath) {
-    std::cout << filePath << std::endl;
+void Trie::printTrie() {
+  std::cout << "Trie" << std::endl;
 }

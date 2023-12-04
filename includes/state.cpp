@@ -1,4 +1,5 @@
 #include "state.h"
+using StatePtr = std::shared_ptr<State>;
 
 State::State() : isFinal_(false), output_(""), id_(idCounter++) {}
 
