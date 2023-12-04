@@ -1,6 +1,6 @@
 CC = g++
 CFLAGS = -std=c++11
-SRC_DIR = includes
+SRC_DIR = src
 TEST_DIR = test
 INCLUDE_DIR = includes
 BUILD_DIR = build
