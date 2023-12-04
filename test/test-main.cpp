@@ -10,11 +10,6 @@ int transducer_test() {
 
 int trie_test() {
 
-  Trie T;
-  Trie::make("asfhahfdkf", T);
-
-  T.printTrie();
-
   std::cout << "Hello World! Trie" << std::endl;
 
   return  0;
