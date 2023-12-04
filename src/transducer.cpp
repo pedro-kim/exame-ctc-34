@@ -171,8 +171,8 @@ void Transducer::printTransducer(const std::string& printerFolder)
   graphFile << "rankdir=LR;\n";
   graphFile << "charset=\"utf8\";\n";
   graphFile << "node [shape=circle];\n";
-  graphFile << "ini [shape=point];\n";
-  graphFile << "ini -> q" << states_[initialState_] << ";\n";
+  graphFile << "start [shape=box style=filled fillcolor=red];\n";
+  graphFile << "start -> q" << states_[initialState_] << ";\n";
 
   for (auto& state : states_) {
     if (state.first->getStateOutput() != "") {
@@ -184,17 +184,16 @@ void Transducer::printTransducer(const std::string& printerFolder)
     }
     if (state.first->getIsFinal()) {
       graphFile << "\tq" << state.second << " [shape=doublecircle];\n";
-      graphFile << "\tq" << state.second << " [style=filled fillcolor=gray];\n";
+      graphFile << "\tq" << state.second << " [style=filled fillcolor=green];\n";
     }
   }
 
   for (auto& state : states_) {
-    for (auto& transition : state.first->getTransitions()) {
+        for (auto& transition : state.first->getTransitions()) {
 
       if (transition.second.first != "") {
         graphFile << "\tq" << state.second << " -> q" << states_[transition.second.second] << " [label=\"" << transition.first << " / " << transition.second.first << "\"];\n";
       }
-
       else {
         graphFile << "\tq" << state.second << " -> q" << states_[transition.second.second] << " [label=\"" << transition.first << "\"];\n";
       }
