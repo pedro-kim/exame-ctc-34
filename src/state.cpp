@@ -68,7 +68,7 @@ void State::cleanTransitions()
   output_ = "";
 }
 
-std::unordered_map<char, std::pair<std::string, StatePtr>> State::getTransitions()
+std::map<char, std::pair<std::string, StatePtr>> State::getTransitions()
 {
   return transitions_;
 }

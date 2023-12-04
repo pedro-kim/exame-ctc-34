@@ -2,6 +2,7 @@
 #define STATE_H
 
 #include <memory>
+#include <map>
 #include <unordered_map>
 #include <string>
 
@@ -21,7 +22,7 @@ public:
   std::shared_ptr<State> &transition(char);         // Returns the pointer to the state which results from the transition by char
   void setTransition(char, std::shared_ptr<State>); // Sets a specific transition by a char to a state pointer
   void cleanTransitions();                          // Cleans all transitions of this
-  std::unordered_map<char, std::pair<std::string, std::shared_ptr<State>>> getTransitions();
+  std::map<char, std::pair<std::string, std::shared_ptr<State>>> getTransitions();
 
   std::shared_ptr<State> copyOfState(); // Returns a copy of this
 
@@ -38,7 +39,7 @@ private:
   std::string output_;
   const unsigned int id_;
 
-  std::unordered_map<char, std::pair<std::string, std::shared_ptr<State>>> transitions_;
+  std::map<char, std::pair<std::string, std::shared_ptr<State>>> transitions_;
 };
 
 #endif

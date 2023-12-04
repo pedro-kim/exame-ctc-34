@@ -6,7 +6,7 @@ std::size_t StateHasher::operator()(const StatePtr s) const
 
   hash_combine(hashValue, s->getIsFinal());
   hash_combine(hashValue, s->getStateOutput());
-  hash_combine(hashValue, s->getId());
+  // hash_combine(hashValue, s->getId());
 
   for (const auto &pair : s->getTransitions())
   {
@@ -22,5 +22,5 @@ template <class T>
 void StateHasher::hash_combine(std::size_t &seed, const T &value) const
 {
   std::hash<T> hasher;
-  seed ^= hasher(value) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+  seed ^= hasher(value) + 0x9e3779b9;
 }
