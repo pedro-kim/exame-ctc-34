@@ -1,6 +1,7 @@
-doing
-plan
-planner
-player
-playing
-swimming
+friday
+monday
+saturday
+sunday
+thursday
+tuesday
+wednesday

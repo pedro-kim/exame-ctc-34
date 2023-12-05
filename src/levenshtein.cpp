@@ -1,4 +1,10 @@
-#include <levenshtein.h>
+#include "../includes/levenshtein.h"
+
+LevenshteinDFA::LevenshteinDFA(const std::string &input, int distance)
+  {
+    this->input = input;
+    this->distance = distance;
+  };
 
 // inicializa o primeiro estado de Levenshtein
 lev_state LevenshteinDFA::start(void)
@@ -62,8 +68,7 @@ std::unordered_set<char> LevenshteinDFA::transitions(const lev_state cur_state)
 int LevenshteinDFA::explore(lev_state &cur_state,
                             std::map<lev_state, int> &states_map,
                             unsigned int &counter,
-                            std::vector<int> &matching,
-                            std::vector<std::tuple<int, int, char>> &transitions_vector)
+                            std::vector<int> &matching)
 {
 
   if (states_map.find(cur_state) != states_map.end())
@@ -84,7 +89,7 @@ int LevenshteinDFA::explore(lev_state &cur_state,
   for (char c : transitions_set)
   {
     lev_state next_state(step(cur_state, c));
-    int exp = explore(next_state, states_map, counter, matching, transitions_vector);
+    int exp = explore(next_state, states_map, counter, matching);
     transitions_vector.push_back(std::make_tuple(states_map[cur_state], exp, c));
   }
 
@@ -92,6 +97,7 @@ int LevenshteinDFA::explore(lev_state &cur_state,
 }
 
 // Gera o DFA de Levenshtein
+
 void LevenshteinDFA::generateDFA()
 {
 
@@ -99,8 +105,8 @@ void LevenshteinDFA::generateDFA()
   unsigned int counter = 0;
   std::vector<int> matching;
 
-  lev_state initial_state(start());
-  explore(initial_state, states_map, counter, matching, transitions_vector);
+  lev_state initial_lev_state(start());
+  explore(initial_lev_state, states_map, counter, matching);
 
   dfa_vector.resize(counter);
 
@@ -123,8 +129,40 @@ void LevenshteinDFA::generateDFA()
   }
 
   for (int i : matching){
-    dfa_vector[i]->setIsFinal(True);
+    dfa_vector[i]->setIsFinal(true);
   }
 
-  initial_state = dfa_vector[0]
+  initial_state = dfa_vector[0];
+}
+
+void LevenshteinDFA::printLev(const std::string& printerFolder) {
+  
+    std::ofstream graphFile(printerFolder);
+    graphFile << "digraph G {\n";
+    graphFile << "\trankdir=TB;\n";
+    graphFile << "charset=\"utf8\";\n";
+    graphFile << "\tnode [shape = doublecircle];\n";
+
+    for (std::size_t i = 0; i < dfa_vector.size(); i++) {
+        if (dfa_vector[i]->getIsFinal()) {
+            graphFile << "\t" << i << " [style=filled fillcolor=gray];\n";
+        }
+    }
+
+    graphFile << "\tnode [shape = circle];\n";
+
+    graphFile <<  "ini [shape=point];\n";
+    graphFile << "ini -> 0;\n";
+
+    int start, end;
+    char label;  
+
+    for (const auto& transaction : transitions_vector) {
+        start = std::get<0>(transaction);
+        end = std::get<1>(transaction);
+        label = std::get<2>(transaction);
+        graphFile << "\t" << start << " -> " << end << " [label=\" " << label << " \"];\n";
+    }
+
+    graphFile << "}\n";
 }

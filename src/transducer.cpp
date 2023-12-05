@@ -1,5 +1,4 @@
 #include "../includes/transducer.h"
-#include <fstream>
 #include <iostream>
 #include <fstream>
 
@@ -29,6 +28,7 @@ void Transducer::make(const std::string& filePath, Transducer& t)
   while (std::getline(inputFile, currentWord))
   {
     currentOutput = std::to_string(t.getNumberOfWords());
+    std::cout << t.getNumberOfWords() << std::endl;
     t.increaseNumberOfWords(); // TODO: switch number of words
     prefixLengthPlus1 = 0;
 
@@ -42,20 +42,12 @@ void Transducer::make(const std::string& filePath, Transducer& t)
     for (int i = previousWord.size(); i > prefixLengthPlus1; i--)
       t.tempStates_[i - 1]->setTransition(previousWord[i - 1], t.findMinimized(t.tempStates_[i]));
 
-    // std::cout << "ENTRE" << std::endl;
-    // for (auto s : t.tempStates_[0]->getTransitions())
-    //   std::cout << s.first << " " << s.second.first << " " << s.second.second->getIsFinal() << std::endl;
-
     for (int i = prefixLengthPlus1; i < currentWord.size(); i++)
     {
       t.tempStates_[i + 1]->cleanTransitions();
       t.tempStates_[i]->setTransition(currentWord[i], t.tempStates_[i + 1]);
     }
-
-    // std::cout << "END" << std::endl;
-    // for (auto s : t.tempStates_[0]->getTransitions())
-    //   std::cout << s.first << " " << s.second.first << " " << s.second.second->getIsFinal() << std::endl;
-
+    
     t.tempStates_[currentWord.size()]->setIsFinal(true);
 
     for (int j = 0; j < prefixLengthPlus1; j++)
@@ -154,8 +146,6 @@ StatePtr Transducer::findMinimized(StatePtr s)
     }
 
     states_[r] = numberOfStates_++;
-    std::cout << "Number of states: " << numberOfStates_ << std::endl;
-    std::cout << "id: " << r->getId() << std::endl;
     numberOfEdges_ += r->getTransitions().size();
   }
 

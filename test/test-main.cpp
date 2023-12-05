@@ -37,6 +37,25 @@ int trie_test() {
 
 int levenshtein_test() {
   std::cout << "Hello World! Levenshtein" << std::endl;
+  std::string currentDirectory = get_current_dir_name();
+
+  LevenshteinDFA lev("woof", 1);
+
+  std::cout << "Before" << std::endl;
+  lev.generateDFA();
+  std::cout << "After" << std::endl;
+
+/*   std::cout << "Number of words: " << lev.getNumberOfWords() << std::endl;
+  std::cout << "Number of states: " << lev.getNumberOfStates() << std::endl;
+  std::cout << "Number of edges: " << lev.getNumberOfEdges() << std::endl; */
+
+  std::string dotPath = currentDirectory + "/assets/graphs/test_fst.dot";
+  std::string pngPath = currentDirectory + "/assets/images/test_fst.png";
+
+  lev.printLev(dotPath);
+
+  std::string command = "dot -Tpng " + dotPath + " -o " + pngPath;
+  system(command.c_str());
   return 0;
 }
 
@@ -47,7 +66,7 @@ int main() {
   bool valid_test = false;
 
   while (!valid_test) {
-    std::string test = "fst";
+    std::string test = "lev";
     std::cout << "Choose a test (fst, trie, lev): ";
     // std::cin >> test;
 

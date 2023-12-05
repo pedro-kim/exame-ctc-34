@@ -6,6 +6,7 @@
 #include <string>
 #include <algorithm>
 #include <iostream>
+#include <fstream>
 #include <unordered_set>
 #include <map>
 
@@ -16,13 +17,12 @@ class LevenshteinDFA
 {
 
 public:
-  LevenshteinDFA(const std::string &input, int distance)
-  {
-    this->input = input;
-    this->distance = distance;
-  };
-  ~LevenshteinDFA(void);
+
+  StatePtr initial_state;
+  LevenshteinDFA(const std::string &input, int distance);
+  //~LevenshteinDFA(void);
   void generateDFA(void);
+  void printLev(const std::string& printerFolder);
 
 private:
   std::string input;
@@ -38,8 +38,7 @@ private:
   int explore(lev_state &cur_state,
               std::map<lev_state, int> &states_map,
               unsigned int &counter,
-              std::vector<int> &matching,
-              std::vector<std::tuple<int, int, char>> &transitions_vector);
+              std::vector<int> &matching);
 };
 
 #endif
