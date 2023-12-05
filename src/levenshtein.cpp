@@ -120,25 +120,11 @@ void LevenshteinDFA::generateDFA()
     label = std::get<2>(trans);
 
     dfa_vector[start]->setTransition(label, dfa_vector[end]);
-    // dfa_vector[start]->setOutput()
   }
 
-  std::cout << "digraph G {\n";
-  std::cout << "    rankdir=LR;\n";
-  std::cout << "    size=\"8,5\"\n";
-  std::cout << "    node [shape = doublecircle];\n";
-
-  for (auto &x : matching)
-  {
-    std::cout << "    " << x << ";\n";
+  for (int i : matching){
+    dfa_vector[i]->setIsFinal(True);
   }
 
-  std::cout << "    node [shape = circle];\n";
-
-  for (auto &x : transitions_vector)
-  {
-    std::cout << "    " << std::get<0>(x) << " -> " << std::get<1>(x) << " [ label = \"" << std::get<2>(x) << "\" ];\n";
-  }
-
-  std::cout << "}\n";
+  initial_state = dfa_vector[0]
 }
