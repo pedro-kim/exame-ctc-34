@@ -5,13 +5,13 @@ std::size_t StateHasher::operator()(const StatePtr s) const
   std::size_t hashValue = 0;
 
   hash_combine(hashValue, s->getIsFinal());
-  hash_combine(hashValue, s->getStateOutput());
+  hash_combine(hashValue, s->getId());
 
-  for (const auto &pair : s->getTransitions())
+  for (const auto &trans : s->getTransitions())
   {
-    hash_combine(hashValue, pair.first);
-    hash_combine(hashValue, pair.second.first);
-    hash_combine(hashValue, pair.second.first);
+    hash_combine(hashValue, trans.first);
+    hash_combine(hashValue, trans.second.second);
+    //hash_combine(hashValue, trans.second.second->getId());
   }
 
   return hashValue;
