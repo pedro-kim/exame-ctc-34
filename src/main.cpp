@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include "../includes/rbtree.h"
 #include <ncurses.h>
 
 int main()
@@ -15,6 +16,9 @@ int main()
   int algorithmChoice;
   int levenshteinChoice;
   int levenshteinDistance;
+
+  RBTree rbt;
+  rbt.make("../assets/test.txt");
 
   // Get user's choose of algorithm
   printw("Choose an autocomplete algorithm: \n 1 for MAST;\n 2 for Red Black Tree.\n");
@@ -78,7 +82,7 @@ int main()
     }
     else if (algorithmChoice == 2)
     {
-      printw("\nRBT test.\n");
+      rbt.find_prefix(input);
       refresh();
     }
 
