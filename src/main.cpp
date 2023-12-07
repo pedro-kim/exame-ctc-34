@@ -17,7 +17,7 @@ int main()
   int levenshteinDistance;
 
   // Get user's choose of algorithm
-  printw("Choose an autocomplete algorithm: \n\t 1 for MAST;\n\t2 for Red Black Tree.\n");
+  printw("Choose an autocomplete algorithm: \n 1 for MAST;\n2 for Red Black Tree.\n");
   refresh();
   scanw("%d", &algorithmChoice);
 
@@ -29,7 +29,7 @@ int main()
   }
 
   // Get user's decision whether to use Levenshtein or not
-  printw("Do you want to use the Levenshtein automata? \n\t1 for Yes;\n\t0 for No.\n");
+  printw("Do you want to use the Levenshtein automata? \n1 for Yes;\n0 for No.\n");
   refresh();
   scanw("%d", &levenshteinChoice);
 
@@ -40,15 +40,18 @@ int main()
     scanw("%d", &levenshteinChoice);
   }
 
-  printw("Choose Levenshtein distance (0, 1, or 2): ");
-  refresh();
-  scanw("%d", &levenshteinDistance);
-
-  while (levenshteinDistance != 0 && levenshteinDistance != 1 && levenshteinDistance != 2)
+  if (levenshteinChoice)
   {
-    printw("Unavailable Levenshtein distance, choose 0, 1 or 2: ");
+    printw("Choose Levenshtein distance (0, 1, or 2): ");
     refresh();
     scanw("%d", &levenshteinDistance);
+
+    while (levenshteinDistance != 0 && levenshteinDistance != 1 && levenshteinDistance != 2)
+    {
+      printw("Unavailable Levenshtein distance, choose 0, 1 or 2: ");
+      refresh();
+      scanw("%d", &levenshteinDistance);
+    }
   }
 
   printw("Enter your word (press Esc to exit):\n");
@@ -73,7 +76,7 @@ int main()
     }
     else if (algorithmChoice == 2)
     {
-      printw("RBT test.\n");
+      printw("\nRBT test.\n");
       refresh();
     }
 

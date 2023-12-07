@@ -24,13 +24,15 @@ OBJS = $(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/%.o,$(SRCS))
 # Lista de arquivos objetos gerados a partir dos arquivos fonte (test)
 OBJS_TEST = $(patsubst $(TEST_DIR)/%.cpp,$(BUILD_DIR)/%.o,$(TEST_SRCS))
 
+NCURSES_LDFLAGS := $(shell pkg-config --libs ncurses)
+
 # Compilar todos os arquivos objetos e criar o executável de testes
 $(TEST_EXECUTABLE): $(OBJS_TEST) $(OBJS)
-	$(CC) $(CFLAGS) $^ -o $@
+	$(CC) $(CFLAGS) $^ -o $@ $(NCURSES_LDFLAGS)
 
 # Compilar todos os arquivos objetos e criar o executável
 $(EXECUTABLE): $(OBJS)
-	$(CC) $(CFLAGS) $^ -o $@
+	$(CC) $(CFLAGS) $^ -o $@ $(NCURSES_LDFLAGS)
 
 # Compilar cada arquivo fonte em um arquivo objeto (src)
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp $(INCLUDES)

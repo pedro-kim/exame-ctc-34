@@ -4,14 +4,15 @@
 #include "../includes/rbtree.h"
 #include "../includes/levenshtein.h"
 
-int transducer_test() {
+int transducer_test()
+{
   std::cout << "Hello World! FST" << std::endl;
   std::string currentDirectory = get_current_dir_name();
 
   Transducer t;
 
   std::cout << "Before" << std::endl;
-  Transducer::make(currentDirectory + "/assets/data/american-english-sorted.txt", t);
+  Transducer::make(currentDirectory + "/assets/data/test.txt", t);
   std::cout << "After" << std::endl;
 
   std::cout << "Number of words: " << t.getNumberOfWords() << std::endl;
@@ -21,14 +22,15 @@ int transducer_test() {
   std::string dotPath = currentDirectory + "/assets/graphs/test_fst.dot";
   std::string pngPath = currentDirectory + "/assets/images/test_fst.png";
 
-  //t.printTransducer(dotPath);
+  // t.printTransducer(dotPath);
 
   std::string command = "dot -Tpng " + dotPath + " -o " + pngPath;
-  //system(command.c_str());
+  // system(command.c_str());
   return 0;
 }
 
-int rbtree_test() {
+int rbtree_test()
+{
 
   std::cout << "Hello World! RBTree" << std::endl;
   std::string currentDirectory = get_current_dir_name();
@@ -41,10 +43,11 @@ int rbtree_test() {
 
   rb.find_prefix("befo");
 
-  return  0;
+  return 0;
 }
 
-int levenshtein_test() {
+int levenshtein_test()
+{
   std::cout << "Hello World! Levenshtein" << std::endl;
   std::string currentDirectory = get_current_dir_name();
 
@@ -54,9 +57,9 @@ int levenshtein_test() {
   lev.generateDFA();
   std::cout << "After" << std::endl;
 
-/*   std::cout << "Number of words: " << lev.getNumberOfWords() << std::endl;
-  std::cout << "Number of states: " << lev.getNumberOfStates() << std::endl;
-  std::cout << "Number of edges: " << lev.getNumberOfEdges() << std::endl; */
+  /*   std::cout << "Number of words: " << lev.getNumberOfWords() << std::endl;
+    std::cout << "Number of states: " << lev.getNumberOfStates() << std::endl;
+    std::cout << "Number of edges: " << lev.getNumberOfEdges() << std::endl; */
 
   std::string dotPath = currentDirectory + "/assets/graphs/lev.dot";
   std::string pngPath = currentDirectory + "/assets/images/lev.png";
@@ -68,33 +71,38 @@ int levenshtein_test() {
   return 0;
 }
 
+// int main()
+// {
+//   std::cout << "Hello World! Main" << std::endl;
 
-int main() {
-  std::cout << "Hello World! Main" << std::endl;
+//   bool valid_test = false;
 
-  bool valid_test = false;
+//   while (!valid_test)
+//   {
+//     std::string test = "fst";
+//     std::cout << "Choose a test (fst, rbtree, lev): ";
+//     // std::cin >> test;
 
-  while (!valid_test) {
-    std::string test = "rbtree";
-    std::cout << "Choose a test (fst, rbtree, lev): ";
-    // std::cin >> test;
+//     if (test == "fst")
+//     {
+//       transducer_test();
+//       valid_test = true;
+//     }
+//     else if (test == "rbtree")
+//     {
+//       rbtree_test();
+//       valid_test = true;
+//     }
+//     else if (test == "lev")
+//     {
+//       levenshtein_test();
+//       valid_test = true;
+//     }
+//     else
+//     {
+//       std::cout << "Invalid test. Try again." << std::endl;
+//     }
+//   }
 
-    if (test == "fst") {
-      transducer_test();
-      valid_test = true;
-    }
-    else if (test == "rbtree") {
-      rbtree_test();
-      valid_test = true;
-    }
-    else if (test == "lev") {
-      levenshtein_test();
-      valid_test = true;
-    }
-    else {
-      std::cout << "Invalid test. Try again." << std::endl;
-    }
-  }
-
-  return 0;
-}
+//   return 0;
+// }
