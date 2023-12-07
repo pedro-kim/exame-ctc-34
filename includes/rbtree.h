@@ -11,53 +11,52 @@
 
 const int NUM_SUGGESTIONS = 100;
 
-class RBTree {
+class RBTree
+{
 public:
+  RBTree();
+  // ~RBTree();
 
-    RBTree();
-    // ~RBTree();
-
-    void make(const std::string& filename);
-    void find_prefix(const std::string& prefix);
-
+  void make(const std::string &filename);
+  std::vector<std::string> find_prefix(const std::string &prefix);
 
 private:
+  class Node
+  {
+  public:
+    Node(const std::string &word)
+    {
+      rightchild = nullptr;
+      leftchild = nullptr;
+      parent = nullptr;
+      color = RED;
+      _word = word;
+    }
 
-    class Node {
-            public:
- 
-        Node(const std::string& word) {
-            rightchild = nullptr;
-            leftchild = nullptr;
-            parent = nullptr;
-            color = RED;
-            _word = word;
-        }
+    Node *parent;
+    Node *leftchild;
+    Node *rightchild;
 
-        Node* parent;
-        Node* leftchild;
-        Node* rightchild;
-
-        enum Color { RED, BLACK };
-        Color color;
-
-        std::string word () {return _word;}
-
-
-        private:
-
-        std::string _word;
-
+    enum Color
+    {
+      RED,
+      BLACK
     };
+    Color color;
 
-    void add(const std::string& word);
-    void rotateRight(Node* node);
-    void rotateLeft(Node* node);
-    void find_prefix_recursive(Node* node, const std::string& prefix, std::vector<std::string>& suggestions);
-    //void destroy_tree(rbNode* node);
+    std::string word() { return _word; }
 
-    Node* _root;
+  private:
+    std::string _word;
+  };
 
+  void add(const std::string &word);
+  void rotateRight(Node *node);
+  void rotateLeft(Node *node);
+  void find_prefix_recursive(Node *node, const std::string &prefix, std::vector<std::string> &suggestions);
+  // void destroy_tree(rbNode* node);
+
+  Node *_root;
 };
 
 #endif

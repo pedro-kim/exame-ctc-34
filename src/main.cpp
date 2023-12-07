@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include "../includes/transducer.h"
 #include "../includes/rbtree.h"
 #include <ncurses.h>
 
@@ -17,8 +18,9 @@ int main()
   int levenshteinChoice;
   int levenshteinDistance;
 
+  // Main Automata
+  Transducer t;
   RBTree rbt;
-  rbt.make("../assets/test.txt");
 
   // Get user's choose of algorithm
   printw("Choose an autocomplete algorithm: \n 1 for MAST;\n 2 for Red Black Tree.\n");
@@ -65,6 +67,7 @@ int main()
 
   while ((ch = getch()) != 27 /* ASCII value for Esc key*/)
   {
+    refresh();
     if (ch == KEY_BACKSPACE)
     {
       input = input.substr(0, input.size() - 1);
@@ -73,6 +76,8 @@ int main()
     {
       input += ch;
     }
+    printw("%s\n", input.c_str());
+    printw("Autocomplete suggestions:\n");
 
     std::vector<std::string> suggestions;
     if (algorithmChoice == 1)
@@ -82,8 +87,12 @@ int main()
     }
     else if (algorithmChoice == 2)
     {
-      rbt.find_prefix(input);
-      refresh();
+      suggestions = rbt.find_prefix(input);
+      for (const auto &suggestion : suggestions)
+      {
+        printw("%s\n", suggestion.c_str());
+        refresh();
+      }
     }
 
     if (levenshteinChoice)
@@ -93,9 +102,8 @@ int main()
       refresh();
     }
 
-    printw("Autocomplete suggestions:\n");
-
-    printw("Input: %s\n", input.c_str());
+    // printw("Input: %s\n", input.c_str());
+    // clear();
     refresh();
   }
 
