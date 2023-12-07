@@ -1,5 +1,7 @@
 #include <iostream>
 #include <vector>
+#include <chrono>
+#include <unistd.h>
 #include "../includes/transducer.h"
 #include "../includes/rbtree.h"
 #include <ncurses.h>
@@ -17,6 +19,7 @@ int main()
   int algorithmChoice;
   int levenshteinChoice;
   int levenshteinDistance;
+  std::string currentDirectory = get_current_dir_name();
 
   // Main Automata
   Transducer t;
@@ -34,8 +37,23 @@ int main()
     scanw("%d", &algorithmChoice);
   }
 
+  auto start = std::chrono::high_resolution_clock::now();
+  switch (algorithmChoice)
+  {
+  case 1:
+    Transducer::make(currentDirectory + "/assets/data/american-english-sorted.txt", t);
+    break;
+  case 2:
+    rbt.make(currentDirectory + "/assets/data/american-english-sorted.txt");
+  default:
+    break;
+  }
+  auto stop = std::chrono::high_resolution_clock::now();
+  auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
+  printw("Time taken by function: %d milliseconds.\n", duration.count());
+
   // Get user's decision whether to use Levenshtein or not
-  printw("Do you want to use the Levenshtein automata? \n 1 for Yes;\n 0 for No.\n");
+  printw("\nDo you want to use the Levenshtein automata? \n 1 for Yes;\n 0 for No.\n");
   refresh();
   scanw("%d", &levenshteinChoice);
 
@@ -65,45 +83,55 @@ int main()
   printw("Enter your word (press Esc to exit): ");
   refresh();
 
-  while ((ch = getch()) != 27 /* ASCII value for Esc key*/)
+  while (true)
   {
-    refresh();
-    if (ch == KEY_BACKSPACE)
+    char ch = getch();
+    if (ch == 27 || ch == '\n')
+      break;
+
+    else if (input.size() > 0 && ch == 127 /* ASCII value for Backspace key*/)
     {
-      input = input.substr(0, input.size() - 1);
+      input.pop_back();
     }
-    else
+    if (!std::isdigit(ch) && ch != ' ' && ch != 127 && ch != 27 && ch != '\n' && input.size() < MAX_WORD_SIZE)
     {
       input += ch;
     }
-    printw("%s\n", input.c_str());
-    printw("Autocomplete suggestions:\n");
+    refresh();
+    clear();
 
+    // Print the constant line
+    printw("Enter your word (press Esc to exit): ");
+
+    // Print the user's input
+    if (ch != 127)
+    {
+      printw("%s\n", input.c_str());
+    }
+    // Print other information based on user's choices
     std::vector<std::string> suggestions;
     if (algorithmChoice == 1)
     {
-      printw("MAST test.\n");
-      refresh();
+      suggestions = t.find_suggestions(input);
     }
     else if (algorithmChoice == 2)
     {
       suggestions = rbt.find_prefix(input);
-      for (const auto &suggestion : suggestions)
-      {
-        printw("%s\n", suggestion.c_str());
-        refresh();
-      }
     }
 
     if (levenshteinChoice)
     {
       std::vector<std::string> filteredSuggestions;
       printw("Levenshtein test.\n");
-      refresh();
     }
 
-    // printw("Input: %s\n", input.c_str());
-    // clear();
+    // Print the constant line
+    printw("\nAutocomplete suggestions:\n");
+    for (const auto &suggestion : suggestions)
+    {
+      printw("%s\n", suggestion.c_str());
+      refresh();
+    }
     refresh();
   }
 
