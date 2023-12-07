@@ -9,21 +9,13 @@
 #include <algorithm>
 #include <fstream>
 
-const int NUM_SUGGESTIONS = 5;
-
-struct rbNode{
-    std::string word;
-    rbNode* left;
-    rbNode* right;
-    rbNode* parent;
-    bool color;
-};
+const int NUM_SUGGESTIONS = 100;
 
 class RBTree {
 public:
 
     RBTree();
-    ~RBTree();
+    // ~RBTree();
 
     void make(const std::string& filename);
     void find_prefix(const std::string& prefix);
@@ -31,14 +23,40 @@ public:
 
 private:
 
+    class Node {
+            public:
+ 
+        Node(const std::string& word) {
+            rightchild = nullptr;
+            leftchild = nullptr;
+            parent = nullptr;
+            color = RED;
+            _word = word;
+        }
 
-    void insert_node(const std::string& word);
-    void insert_fixup(rbNode* node);
-    void rotate_left(rbNode* node);
-    void rotate_right(rbNode* node);
-    void destroy_tree(rbNode* node);
+        Node* parent;
+        Node* leftchild;
+        Node* rightchild;
 
-    rbNode* root_;
+        enum Color { RED, BLACK };
+        Color color;
+
+        std::string word () {return _word;}
+
+
+        private:
+
+        std::string _word;
+
+    };
+
+    void add(const std::string& word);
+    void rotateRight(Node* node);
+    void rotateLeft(Node* node);
+    void find_prefix_recursive(Node* node, const std::string& prefix, std::vector<std::string>& suggestions);
+    //void destroy_tree(rbNode* node);
+
+    Node* _root;
 
 };
 

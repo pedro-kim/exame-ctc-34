@@ -36,10 +36,10 @@ int rbtree_test() {
   RBTree rb;
 
   std::cout << "Before" << std::endl;
-  rb.make(currentDirectory + "/assets/data/test.txt");
+  rb.make(currentDirectory + "/assets/data/american-english-sorted.txt");
   std::cout << "After" << std::endl;
 
-  rb.find_prefix("ab");
+  rb.find_prefix("befo");
 
   return  0;
 }
