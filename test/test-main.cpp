@@ -23,7 +23,6 @@ int transducer_test()
   std::string pngPath = currentDirectory + "/assets/images/test_fst.png";
 
   // t.printTransducer(dotPath);
-  //t.find_suggestions("befo");
 
   std::vector<std::string> suggestions = t.find_suggestions("befo");
 
@@ -81,34 +80,34 @@ int levenshtein_test()
 // {
 //   std::cout << "Hello World! Main" << std::endl;
 
-//   bool valid_test = false;
+  //   bool valid_test = false;
 
-//   while (!valid_test)
-//   {
+  //   while (!valid_test)
+  //   {
 //     std::string test = "fst";
-//     std::cout << "Choose a test (fst, rbtree, lev): ";
-//     // std::cin >> test;
+    //     std::cout << "Choose a test (fst, rbtree, lev): ";
+    //     // std::cin >> test;
 
-//     if (test == "fst")
-//     {
+    //     if (test == "fst")
+    //     {
 //       transducer_test();
-//       valid_test = true;
-//     }
+      //       valid_test = true;
+    //     }
 //     else if (test == "rbtree")
-//     {
+    //     {
 //       rbtree_test();
-//       valid_test = true;
-//     }
+      //       valid_test = true;
+    //     }
 //     else if (test == "lev")
-//     {
+    //     {
 //       levenshtein_test();
-//       valid_test = true;
-//     }
+      //       valid_test = true;
+    //     }
 //     else
-//     {
+    //     {
 //       std::cout << "Invalid test. Try again." << std::endl;
-//     }
+    //     }
 //   }
 
-//   return 0;
+  //   return 0;
 // }

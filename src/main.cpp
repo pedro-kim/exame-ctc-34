@@ -50,7 +50,7 @@ int main()
   }
   auto stop = std::chrono::high_resolution_clock::now();
   auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
-  printw("Time taken by function: %d milliseconds.\n", duration.count());
+  printw("Time taken by function: %ld milliseconds.\n", duration.count());
 
   // Get user's decision whether to use Levenshtein or not
   printw("\nDo you want to use the Levenshtein automata? \n 1 for Yes;\n 0 for No.\n");
@@ -127,10 +127,13 @@ int main()
 
     // Print the constant line
     printw("\nAutocomplete suggestions:\n");
+    int i = 0;
     for (const auto &suggestion : suggestions)
     {
       printw("%s\n", suggestion.c_str());
       refresh();
+      i++;
+      if (i == 20) break;
     }
     refresh();
   }
