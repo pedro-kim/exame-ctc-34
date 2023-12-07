@@ -28,7 +28,7 @@ void Transducer::make(const std::string& filePath, Transducer& t)
   while (std::getline(inputFile, currentWord))
   {
     currentOutput = std::to_string(t.getNumberOfWords());
-    std::cout << t.getNumberOfWords() << std::endl;
+    //std::cout << t.getNumberOfWords() << std::endl;
     t.increaseNumberOfWords(); // TODO: switch number of words
     prefixLengthPlus1 = 0;
 
@@ -193,3 +193,49 @@ void Transducer::printTransducer(const std::string& printerFolder)
   graphFile << "}\n";
 }
 
+std::vector<std::string> Transducer::find_suggestions(const std::string& prefix) {
+  std::vector<bool> visited(numberOfStates_, false);
+  std::vector<std::string> suggestions;
+  StatePtr current = initialState_;
+  std::string currentSuggestion = "";
+
+  for (int i = 0; i < prefix.size(); i++){
+    current = current->transitions_[prefix[i]].second;
+  }
+
+  currentSuggestion = prefix;
+  dfs_recursive(current,visited, suggestions, currentSuggestion);
+
+  // for (int i = 0; i < suggestions.size(); i++){
+  //   std::cout << suggestions[i] << std::endl;
+  // }
+  return suggestions;
+}
+
+void Transducer::dfs_recursive(StatePtr current, std::vector<bool>& visited, std::vector<std::string>& suggestions, std::string& currentSuggestion) {
+
+  if (!current) {
+      return;
+  }
+  // if (visited[current->getId()] == true) {
+  //     return;
+  // }
+
+  // // Process the current state (optional)
+  // std::cout << "Visiting State " << current->getId() << std::endl;
+
+
+  if (current->getIsFinal() == true) {
+      suggestions.push_back(currentSuggestion);
+  }
+
+  visited[current->getId()] = true;
+
+  for (const auto& pair : current->transitions_) {
+      StatePtr next = pair.second.second;
+      currentSuggestion.push_back(pair.first);
+      dfs_recursive(next, visited, suggestions, currentSuggestion);
+  }
+
+  currentSuggestion.pop_back();
+}

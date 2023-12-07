@@ -12,7 +12,7 @@ int transducer_test()
   Transducer t;
 
   std::cout << "Before" << std::endl;
-  Transducer::make(currentDirectory + "/assets/data/test.txt", t);
+  Transducer::make(currentDirectory + "/assets/data/american-english-sorted.txt", t);
   std::cout << "After" << std::endl;
 
   std::cout << "Number of words: " << t.getNumberOfWords() << std::endl;
@@ -23,6 +23,12 @@ int transducer_test()
   std::string pngPath = currentDirectory + "/assets/images/test_fst.png";
 
   // t.printTransducer(dotPath);
+  //t.find_suggestions("befo");
+
+  std::vector<std::string> suggestions = t.find_suggestions("befo");
+
+  for (auto &s : suggestions)
+    std::cout << s << std::endl;
 
   std::string command = "dot -Tpng " + dotPath + " -o " + pngPath;
   // system(command.c_str());

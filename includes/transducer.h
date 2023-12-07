@@ -27,6 +27,8 @@ public:
   unsigned int getNumberOfWords();
   void increaseNumberOfWords();
 
+  std::vector<std::string> find_suggestions(const std::string &);
+
 private:
   StatePtr findMinimized(StatePtr);
 
@@ -35,6 +37,8 @@ private:
   StatePtr initialState_;
 
   std::vector<std::string> words_;
+
+  void dfs_recursive(StatePtr current,std::vector<bool>& visited, std::vector<std::string>& suggestions, std::string& currentSuggestion);
 
   unsigned int numberOfStates_;
   unsigned int numberOfEdges_;
