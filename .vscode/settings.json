@@ -55,6 +55,7 @@
         "ratio": "cpp",
         "iomanip": "cpp",
         "sstream": "cpp",
-        "optional": "cpp"
+        "optional": "cpp",
+        "set": "cpp"
     }
 }

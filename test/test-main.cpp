@@ -1,7 +1,7 @@
 #include <unistd.h>
 #include <iostream>
 #include "../includes/transducer.h"
-#include "../includes/trie.h"
+#include "../includes/rbtree.h"
 #include "../includes/levenshtein.h"
 
 int transducer_test() {
@@ -30,7 +30,16 @@ int transducer_test() {
 
 int rbtree_test() {
 
-  std::cout << "Hello World! Trie" << std::endl;
+  std::cout << "Hello World! RBTree" << std::endl;
+  std::string currentDirectory = get_current_dir_name();
+
+  RBTree rb;
+
+  std::cout << "Before" << std::endl;
+  rb.make(currentDirectory + "/assets/data/test.txt");
+  std::cout << "After" << std::endl;
+
+  rb.find_prefix("ab");
 
   return  0;
 }
@@ -66,7 +75,7 @@ int main() {
   bool valid_test = false;
 
   while (!valid_test) {
-    std::string test = "fst";
+    std::string test = "rbtree";
     std::cout << "Choose a test (fst, rbtree, lev): ";
     // std::cin >> test;
 
