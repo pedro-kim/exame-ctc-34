@@ -24,12 +24,14 @@ public:
   void generateDFA(void);
   void printLev(const std::string& printerFolder);
   std::vector<std::string> find_suggestions(const std::vector<std::string>& dictInput);
+  void estimateMemoryUsage(std::pair<std::string, std::string>& memory);
 
 private:
   std::string input;
   int distance;
   std::vector<std::tuple<int, int, char>> transitions_vector;
   std::vector<StatePtr> dfa_vector;
+  int numberOfStates_;
 
   lev_state start(void);
   lev_state step(const lev_state &cur_state, char c);

@@ -4,6 +4,7 @@ LevenshteinDFA::LevenshteinDFA(const std::string& input, int distance)
 {
   this->input = input;
   this->distance = distance;
+  numberOfStates_ = 0;
 };
 
 // inicializa o primeiro estado de Levenshtein
@@ -114,6 +115,7 @@ void LevenshteinDFA::generateDFA()
   for (int i = 0; i < counter; ++i)
   {
     dfa_vector[i] = std::make_shared<State>();
+    numberOfStates_++;
   }
 
   for (auto& trans : transitions_vector)
@@ -196,4 +198,9 @@ std::vector<std::string> LevenshteinDFA::find_suggestions(const std::vector<std:
   //   std::cout << suggestions[i] << std::endl;
   // }
   return suggestions;
+}
+
+void LevenshteinDFA::estimateMemoryUsage(std::pair<std::string, std::string>& memory) {
+  memory.first = std::to_string(sizeof(State));
+  memory.second = std::to_string(numberOfStates_ * sizeof(State));
 }
