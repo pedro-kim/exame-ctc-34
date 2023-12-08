@@ -166,3 +166,30 @@ void LevenshteinDFA::printLev(const std::string& printerFolder) {
 
     graphFile << "}\n";
 }
+
+std::vector<std::string> LevenshteinDFA::find_suggestions(const std::vector<std::string>& input) {
+  std::vector<std::string> suggestions;
+  StatePtr current = initial_state;
+
+  for (const auto& word : input) {
+    for (const auto& letter : word) {
+      if (current->getTransitions().find(letter) != current->getTransitions().end()) {
+        current = current->transitions_[letter].second;
+      }
+      else if(current->getTransitions().find('*') != current->getTransitions().end()) {
+        current = current->transitions_['*'].second;
+      } 
+      else {
+        continue;
+      }
+    }
+    if (current->getIsFinal()) {
+      suggestions.push_back(word);
+    }
+  }
+
+  // for (int i = 0; i < suggestions.size(); i++){
+  //   std::cout << suggestions[i] << std::endl;
+  // }
+  return suggestions;
+}
