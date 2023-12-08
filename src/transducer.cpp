@@ -199,6 +199,10 @@ std::vector<std::string> Transducer::find_suggestions(const std::string& prefix)
   StatePtr current = initialState_;
   std::string currentSuggestion = "";
 
+  if (prefix.size() == 0){
+    return suggestions;
+  }
+
   for (int i = 0; i < prefix.size(); i++){
     current = current->transitions_[prefix[i]].second;
   }
