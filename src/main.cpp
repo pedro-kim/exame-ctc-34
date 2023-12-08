@@ -10,6 +10,8 @@ int main()
 {
 
   initscr();            // Initializes curses
+  raw();
+  noecho();
   keypad(stdscr, TRUE); // Enable special keys
   cbreak();             // Disable line buffering
 
@@ -28,13 +30,15 @@ int main()
   // Get user's choose of algorithm
   printw("Choose an autocomplete algorithm: \n 1 for MAST;\n 2 for Red Black Tree.\n");
   refresh();
-  scanw("%d", &algorithmChoice);
+  algorithmChoice = getch() - '0';
+  printw("%d\n", algorithmChoice);
 
   while (algorithmChoice != 1 && algorithmChoice != 2)
   {
     printw("Invalid algorithm choice. Please choose 1 or 2.\n");
     refresh();
-    scanw("%d", &algorithmChoice);
+    algorithmChoice = getch() - '0';
+    printw("%d\n", algorithmChoice);
   }
 
   auto start = std::chrono::high_resolution_clock::now();
@@ -55,26 +59,30 @@ int main()
   // Get user's decision whether to use Levenshtein or not
   printw("\nDo you want to use the Levenshtein automata? \n 1 for Yes;\n 0 for No.\n");
   refresh();
-  scanw("%d", &levenshteinChoice);
+  levenshteinChoice = getch() - '0';
+  printw("%d\n", levenshteinChoice);
 
   while (levenshteinChoice != 1 && levenshteinChoice != 0)
   {
     printw("Invalid choice. Please type 1 or 0.\n");
     refresh();
-    scanw("%d", &levenshteinChoice);
+    levenshteinChoice = getch() - '0';
+    printw("%d\n", levenshteinChoice);
   }
 
   if (levenshteinChoice)
   {
     printw("Choose Levenshtein distance (0, 1, or 2): ");
     refresh();
-    scanw("%d", &levenshteinDistance);
+    levenshteinDistance = getch() - '0';
+    printw("%d\n", levenshteinDistance);
 
     while (levenshteinDistance != 0 && levenshteinDistance != 1 && levenshteinDistance != 2)
     {
       printw("Unavailable Levenshtein distance, choose 0, 1 or 2: ");
       refresh();
-      scanw("%d", &levenshteinDistance);
+      levenshteinDistance = getch() - '0';
+      printw("%d\n", levenshteinDistance);
     }
   }
 
@@ -83,17 +91,22 @@ int main()
   printw("Enter your word (press Esc to exit): ");
   refresh();
 
+  std::pair<int, int> cursorToInput = std::make_pair(0, 0);
   while (true)
   {
-    char ch = getch();
+    int ch = getch();
     if (ch == 27 || ch == '\n')
       break;
 
-    else if (input.size() > 0 && ch == 127 /* ASCII value for Backspace key*/)
+    else if (ch == KEY_BACKSPACE)
     {
-      input.pop_back();
+      if (!input.empty())
+      {
+        input.pop_back();
+      }
     }
-    if (!std::isdigit(ch) && ch != ' ' && ch != 127 && ch != 27 && ch != '\n' && input.size() < MAX_WORD_SIZE)
+
+    if (!std::isdigit(ch) && ch != ' ' && ch != KEY_BACKSPACE && ch != 27 && ch != '\n' && input.size() < MAX_WORD_SIZE)
     {
       input += ch;
     }
@@ -103,11 +116,10 @@ int main()
     // Print the constant line
     printw("Enter your word (press Esc to exit): ");
 
-    // Print the user's input
-    if (ch != 127)
-    {
-      printw("%s\n", input.c_str());
-    }
+    printw("%s", input.c_str());
+    refresh();
+    cursorToInput.first = 37 + input.size();
+    cursorToInput.second = 0;
     // Print other information based on user's choices
     std::vector<std::string> suggestions;
     if (algorithmChoice == 1)
@@ -128,13 +140,15 @@ int main()
     // Print the constant line
     printw("\nAutocomplete suggestions:\n");
     int i = 0;
-    for (const auto &suggestion : suggestions)
+    for (const auto& suggestion : suggestions)
     {
       printw("%s\n", suggestion.c_str());
       refresh();
       i++;
       if (i == 20) break;
     }
+
+    move(cursorToInput.second, cursorToInput.first);
     refresh();
   }
 
