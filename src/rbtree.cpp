@@ -183,3 +183,39 @@ void RBTree::find_prefix_recursive(Node *node, const std::string &prefix, std::v
   find_prefix_recursive(node->leftchild, prefix, suggestions);
   find_prefix_recursive(node->rightchild, prefix, suggestions);
 }
+
+std::vector<std::string> RBTree::search_prefix(const std::string &prefix) {
+  std::vector<std::string> suggestions;
+  Node *first = _root;
+  Node *last = _root;
+
+  if (prefix.size() == 0)
+  {
+    return suggestions;
+  }
+
+  while (first->leftchild != nullptr && first->rightchild != nullptr) {
+    if (first->word().compare(0, prefix.size(),prefix) > 0 && first->leftchild != nullptr) {
+      first = first->leftchild;
+    } else if (first->word().compare(0, prefix.size(),prefix) < 0 && first->rightchild != nullptr) {
+      first = first->rightchild;
+    } else {
+      break;
+    }
+  }
+
+  search_recursive(_root, first->word(), last->word(), suggestions, prefix);
+
+  return suggestions;
+}//find
+
+void RBTree::search_recursive (Node* current, const std::string &first, const std::string &last, std::vector<std::string> suggestions, const std::string &prefix) {
+  if (!current) return;
+  if (current->word() > last) search_recursive(current->leftchild, first, last, suggestions, prefix);
+  else if (current->word() < first) search_recursive(current->rightchild, first, last, suggestions, prefix);
+  else {
+    search_recursive(current->leftchild, first, last, suggestions, prefix);
+    suggestions.push_back(current->word());
+    search_recursive(current->rightchild, first, last, suggestions, prefix);
+  }     
+}

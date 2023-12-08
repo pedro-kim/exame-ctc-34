@@ -19,6 +19,7 @@ public:
 
   void make(const std::string &filename);
   std::vector<std::string> find_prefix(const std::string &prefix);
+  std::vector<std::string> search_prefix(const std::string &prefix);
 
 private:
   class Node
@@ -54,6 +55,7 @@ private:
   void rotateRight(Node *node);
   void rotateLeft(Node *node);
   void find_prefix_recursive(Node *node, const std::string &prefix, std::vector<std::string> &suggestions);
+  void search_recursive (Node* current, const std::string &first, const std::string &last, std::vector<std::string> suggestions, const std::string &prefix);
   // void destroy_tree(rbNode* node);
 
   Node *_root;
