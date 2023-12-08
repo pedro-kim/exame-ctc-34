@@ -1,4 +1,5 @@
 #include "../includes/rbtree.h"
+#include "rbtree.h"
 
 RBTree::RBTree()
 {
@@ -186,9 +187,9 @@ void RBTree::find_prefix_recursive(Node *node, const std::string &prefix, std::v
   find_prefix_recursive(node->rightchild, prefix, suggestions);
 }
 
-void RBTree::estimateMemoryUsage() {
-  std::cout << "Espaço de memória de um nó da árvore: " << sizeof(Node) << " bytes" << std::endl;
-  std::cout << "Espaço de memória total ocupado: " << numberOfNodes_ * sizeof(Node) << " bytes" << std::endl;
+void RBTree::estimateMemoryUsage(std::pair<std::string, std::string>& memory) {
+  memory.first = std::to_string(sizeof(Node));
+  memory.second = std::to_string(numberOfNodes_ * sizeof(Node));
 }
 std::vector<std::string> RBTree::search_prefix(const std::string &prefix) {
   std::vector<std::string> suggestions;
@@ -215,13 +216,23 @@ std::vector<std::string> RBTree::search_prefix(const std::string &prefix) {
   return suggestions;
 }//find
 
-void RBTree::search_recursive (Node* current, const std::string &first, const std::string &last, std::vector<std::string> suggestions, const std::string &prefix) {
-  if (!current) return;
-  if (current->word() > last) search_recursive(current->leftchild, first, last, suggestions, prefix);
-  else if (current->word() < first) search_recursive(current->rightchild, first, last, suggestions, prefix);
-  else {
-    search_recursive(current->leftchild, first, last, suggestions, prefix);
+
+int RBTree::getNumberOfNodes()
+{
+  return numberOfNodes_;
+}
+
+void RBTree::search_recursive (Node* current, const std::string &first, const std::string &last, std::vector<std::string> &suggestions, const std::string &prefix) {
+  if (current == nullptr) return;
+  if (current->word() > first) search_recursive(current->leftchild, first, last, suggestions, prefix);
+  if (current->word() < last) search_recursive(current->rightchild, first, last, suggestions, prefix);
+  // else {
+  //   search_recursive(current->leftchild, first, last, suggestions, prefix);
+  //   suggestions.push_back(current->word());
+  //   search_recursive(current->rightchild, first, last, suggestions, prefix);
+  // }
+  if (current->word().compare(0, prefix.size(), prefix) == 0)
+  {
     suggestions.push_back(current->word());
-    search_recursive(current->rightchild, first, last, suggestions, prefix);
-  }     
+  }
 }

@@ -247,7 +247,7 @@ void Transducer::dfs_recursive(StatePtr current, std::vector<bool>& visited, std
   currentSuggestion.pop_back();
 }
 
-void Transducer::estimateMemoryUsage() {
-  std::cout << "Espaço de memória de um nó da árvore: " << sizeof(StatePtr) << " bytes" << std::endl;
-  std::cout << "Espaço de memória total ocupado: " << numberOfStates_ * sizeof(StatePtr) << " bytes" << std::endl;
+void Transducer::estimateMemoryUsage(std::pair<std::string, std::string>& memory) {
+  memory.first = std::to_string(sizeof(StatePtr));
+  memory.second = std::to_string(numberOfStates_ * sizeof(StatePtr));
 }
