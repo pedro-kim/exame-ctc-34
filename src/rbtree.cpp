@@ -155,6 +155,11 @@ std::vector<std::string> RBTree::find_prefix(const std::string &prefix)
   std::vector<std::string> suggestions;
   Node *node = _root;
 
+  if (prefix.size() == 0)
+  {
+    return suggestions;
+  }
+
   find_prefix_recursive(node, prefix, suggestions);
 
   // for(int i= 0; i < NUM_SUGGESTIONS && i < suggestions.size(); i++) {
