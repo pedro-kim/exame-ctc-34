@@ -1,10 +1,10 @@
 #include "../includes/levenshtein.h"
 
-LevenshteinDFA::LevenshteinDFA(const std::string &input, int distance)
-  {
-    this->input = input;
-    this->distance = distance;
-  };
+LevenshteinDFA::LevenshteinDFA(const std::string& input, int distance)
+{
+  this->input = input;
+  this->distance = distance;
+};
 
 // inicializa o primeiro estado de Levenshtein
 lev_state LevenshteinDFA::start(void)
@@ -19,7 +19,7 @@ lev_state LevenshteinDFA::start(void)
 }
 
 // Retorna um novo estado (linha da matriz de PD) a partir do estado atual e do novo caracter lido
-lev_state LevenshteinDFA::step(const lev_state &cur_state, char c)
+lev_state LevenshteinDFA::step(const lev_state& cur_state, char c)
 {
 
   lev_state new_state;
@@ -28,10 +28,10 @@ lev_state LevenshteinDFA::step(const lev_state &cur_state, char c)
   for (size_t i = 0; i < cur_state.size() - 1; ++i)
   {
     int cost = (input[i] == c) ? 0 : 1;
-    new_state.push_back(std::min({new_state[i] + 1, cur_state[i] + cost, cur_state[i + 1] + 1}));
+    new_state.push_back(std::min({ new_state[i] + 1, cur_state[i] + cost, cur_state[i + 1] + 1 }));
   }
 
-  for (auto &x : new_state)
+  for (auto& x : new_state)
   {
     x = std::min(x, distance + 1);
   }
@@ -65,10 +65,10 @@ std::unordered_set<char> LevenshteinDFA::transitions(const lev_state cur_state)
 // Função recursiva que explora o DFA em um DFS e retorna a numeração dos estados a partir da ordem de visita
 // states_map deve ser inicializado com todos os estados possíveis
 // transitions_vector armazena todas as transilçoes (estado incial, estado final, caracter lido)
-int LevenshteinDFA::explore(lev_state &cur_state,
-                            std::map<lev_state, int> &states_map,
-                            unsigned int &counter,
-                            std::vector<int> &matching)
+int LevenshteinDFA::explore(lev_state& cur_state,
+  std::map<lev_state, int>& states_map,
+  unsigned int& counter,
+  std::vector<int>& matching)
 {
 
   if (states_map.find(cur_state) != states_map.end())
@@ -116,7 +116,7 @@ void LevenshteinDFA::generateDFA()
     dfa_vector[i] = std::make_shared<State>();
   }
 
-  for (auto &trans : transitions_vector)
+  for (auto& trans : transitions_vector)
   {
     int start, end;
     char label;
@@ -128,7 +128,7 @@ void LevenshteinDFA::generateDFA()
     dfa_vector[start]->setTransition(label, dfa_vector[end]);
   }
 
-  for (int i : matching){
+  for (int i : matching) {
     dfa_vector[i]->setIsFinal(true);
   }
 
@@ -136,51 +136,55 @@ void LevenshteinDFA::generateDFA()
 }
 
 void LevenshteinDFA::printLev(const std::string& printerFolder) {
-  
-    std::ofstream graphFile(printerFolder);
-    graphFile << "digraph G {\n";
-    graphFile << "\trankdir=TB;\n";
-    graphFile << "charset=\"utf8\";\n";
-    graphFile << "\tnode [shape = doublecircle];\n";
 
-    for (std::size_t i = 0; i < dfa_vector.size(); i++) {
-        if (dfa_vector[i]->getIsFinal()) {
-            graphFile << "\t" << i << " [style=filled fillcolor=gray];\n";
-        }
+  std::ofstream graphFile(printerFolder);
+  graphFile << "digraph G {\n";
+  graphFile << "\trankdir=TB;\n";
+  graphFile << "charset=\"utf8\";\n";
+  graphFile << "\tnode [shape = doublecircle];\n";
+
+  for (std::size_t i = 0; i < dfa_vector.size(); i++) {
+    if (dfa_vector[i]->getIsFinal()) {
+      graphFile << "\t" << i << " [style=filled fillcolor=gray];\n";
     }
+  }
 
-    graphFile << "\tnode [shape = circle];\n";
+  graphFile << "\tnode [shape = circle];\n";
 
-    graphFile <<  "ini [shape=point];\n";
-    graphFile << "ini -> 0;\n";
+  graphFile << "ini [shape=point];\n";
+  graphFile << "ini -> 0;\n";
 
-    int start, end;
-    char label;  
+  int start, end;
+  char label;
 
-    for (const auto& transaction : transitions_vector) {
-        start = std::get<0>(transaction);
-        end = std::get<1>(transaction);
-        label = std::get<2>(transaction);
-        graphFile << "\t" << start << " -> " << end << " [label=\" " << label << " \"];\n";
-    }
+  for (const auto& trans : transitions_vector) {
+    start = std::get<0>(trans);
+    end = std::get<1>(trans);
+    label = std::get<2>(trans);
+    graphFile << "\t" << start << " -> " << end << " [label=\" " << label << " \"];\n";
+  }
 
-    graphFile << "}\n";
+  graphFile << "}\n";
 }
 
-std::vector<std::string> LevenshteinDFA::find_suggestions(const std::vector<std::string>& input) {
-  std::vector<std::string> suggestions;
-  StatePtr current = initial_state;
+std::vector<std::string> LevenshteinDFA::find_suggestions(const std::vector<std::string>& dictInput) {
+  if (dictInput.size() == 0) {
+    return std::vector<std::string>(0);
+  }
 
-  for (const auto& word : input) {
+  std::vector<std::string> suggestions;
+
+  for (const auto& word : dictInput) {
+    StatePtr current = initial_state;
     for (const auto& letter : word) {
-      if (current->getTransitions().find(letter) != current->getTransitions().end()) {
+      if (current->transitions_.find(letter) != current->transitions_.end()) {
         current = current->transitions_[letter].second;
       }
-      else if(current->getTransitions().find('*') != current->getTransitions().end()) {
+      else if (current->transitions_.find('*') != current->transitions_.end()) {
         current = current->transitions_['*'].second;
-      } 
+      }
       else {
-        continue;
+        break;
       }
     }
     if (current->getIsFinal()) {

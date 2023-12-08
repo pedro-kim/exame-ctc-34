@@ -2,6 +2,7 @@
 
 RBTree::RBTree()
 {
+  numberOfNodes_ = 0;
   _root = nullptr;
   return;
 }
@@ -113,6 +114,7 @@ void RBTree::add(const std::string &word)
       }
     }
     _root->color = Node::BLACK;
+    numberOfNodes_++;
   }
 }
 
@@ -182,4 +184,9 @@ void RBTree::find_prefix_recursive(Node *node, const std::string &prefix, std::v
 
   find_prefix_recursive(node->leftchild, prefix, suggestions);
   find_prefix_recursive(node->rightchild, prefix, suggestions);
+}
+
+void RBTree::estimateMemoryUsage() {
+  std::cout << "Espaço de memória de um nó da árvore: " << sizeof(Node) << " bytes" << std::endl;
+  std::cout << "Espaço de memória total ocupado: " << numberOfNodes_ * sizeof(Node) << " bytes" << std::endl;
 }

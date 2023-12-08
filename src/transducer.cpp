@@ -47,7 +47,7 @@ void Transducer::make(const std::string& filePath, Transducer& t)
       t.tempStates_[i + 1]->cleanTransitions();
       t.tempStates_[i]->setTransition(currentWord[i], t.tempStates_[i + 1]);
     }
-    
+
     t.tempStates_[currentWord.size()]->setIsFinal(true);
 
     for (int j = 0; j < prefixLengthPlus1; j++)
@@ -179,7 +179,7 @@ void Transducer::printTransducer(const std::string& printerFolder)
   }
 
   for (auto& state : states_) {
-        for (auto& transition : state.first->getTransitions()) {
+    for (auto& transition : state.first->getTransitions()) {
 
       if (transition.second.first != "") {
         graphFile << "\tq" << state.second << " -> q" << states_[transition.second.second] << " [label=\"" << transition.first << " / " << transition.second.first << "\"];\n";
@@ -199,16 +199,19 @@ std::vector<std::string> Transducer::find_suggestions(const std::string& prefix)
   StatePtr current = initialState_;
   std::string currentSuggestion = "";
 
-  if (prefix.size() == 0){
+  if (prefix.size() == 0) {
     return suggestions;
   }
 
-  for (int i = 0; i < prefix.size(); i++){
+  for (int i = 0; i < prefix.size(); i++) {
+    if (current->transitions_.find(prefix[i]) == current->transitions_.end()) {
+      return suggestions;
+    }
     current = current->transitions_[prefix[i]].second;
   }
 
   currentSuggestion = prefix;
-  dfs_recursive(current,visited, suggestions, currentSuggestion);
+  dfs_recursive(current, visited, suggestions, currentSuggestion);
 
   // for (int i = 0; i < suggestions.size(); i++){
   //   std::cout << suggestions[i] << std::endl;
@@ -219,7 +222,7 @@ std::vector<std::string> Transducer::find_suggestions(const std::string& prefix)
 void Transducer::dfs_recursive(StatePtr current, std::vector<bool>& visited, std::vector<std::string>& suggestions, std::string& currentSuggestion) {
 
   if (!current) {
-      return;
+    return;
   }
   // if (visited[current->getId()] == true) {
   //     return;
@@ -230,16 +233,21 @@ void Transducer::dfs_recursive(StatePtr current, std::vector<bool>& visited, std
 
 
   if (current->getIsFinal() == true) {
-      suggestions.push_back(currentSuggestion);
+    suggestions.push_back(currentSuggestion);
   }
 
   visited[current->getId()] = true;
 
   for (const auto& pair : current->transitions_) {
-      StatePtr next = pair.second.second;
-      currentSuggestion.push_back(pair.first);
-      dfs_recursive(next, visited, suggestions, currentSuggestion);
+    StatePtr next = pair.second.second;
+    currentSuggestion.push_back(pair.first);
+    dfs_recursive(next, visited, suggestions, currentSuggestion);
   }
 
   currentSuggestion.pop_back();
+}
+
+void Transducer::estimateMemoryUsage() {
+  std::cout << "Espaço de memória de um nó da árvore: " << sizeof(StatePtr) << " bytes" << std::endl;
+  std::cout << "Espaço de memória total ocupado: " << numberOfStates_ * sizeof(StatePtr) << " bytes" << std::endl;
 }

@@ -19,8 +19,11 @@ public:
 
   void make(const std::string &filename);
   std::vector<std::string> find_prefix(const std::string &prefix);
+  void estimateMemoryUsage();
 
 private:
+
+  int numberOfNodes_;
   class Node
   {
   public:

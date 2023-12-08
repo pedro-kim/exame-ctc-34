@@ -28,6 +28,7 @@ public:
   void increaseNumberOfWords();
 
   std::vector<std::string> find_suggestions(const std::string &);
+  void estimateMemoryUsage();
 
 private:
   StatePtr findMinimized(StatePtr);

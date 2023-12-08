@@ -23,7 +23,7 @@ public:
   //~LevenshteinDFA(void);
   void generateDFA(void);
   void printLev(const std::string& printerFolder);
-  std::vector<std::string> find_suggestions(const std::vector<std::string>& input);
+  std::vector<std::string> find_suggestions(const std::vector<std::string>& dictInput);
 
 private:
   std::string input;
